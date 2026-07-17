@@ -74,7 +74,13 @@ export async function scoreMatch(input: MatchInput): Promise<{ score: number; br
   const text = response.choices[0]?.message?.content;
   if (!text) throw new Error("No response from AI");
 
-  const breakdown = JSON.parse(text) as MatchBreakdown;
+  let breakdown: MatchBreakdown;
+  try {
+    breakdown = JSON.parse(text);
+  } catch {
+    throw new Error("AI returned invalid JSON — please try again");
+  }
+
   const dimensions = [
     breakdown.leadership_fit,
     breakdown.domain_fit,
@@ -83,7 +89,7 @@ export async function scoreMatch(input: MatchInput): Promise<{ score: number; br
     breakdown.compensation_fit,
     breakdown.visa_fit,
     breakdown.growth_potential,
-  ];
+  ].map((v) => (typeof v === "number" && !isNaN(v) ? Math.min(100, Math.max(0, v)) : 50));
   const score = Math.round(dimensions.reduce((a, b) => a + b, 0) / dimensions.length);
 
   return { score, breakdown };

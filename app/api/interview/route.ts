@@ -9,7 +9,12 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await request.json();
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
   const { opportunityId, company, role_title } = body;
 
   if (!company || !role_title) {
@@ -45,29 +50,37 @@ export async function POST(request: Request) {
     description = opp?.description ?? null;
   }
 
-  const result = await prepareInterview({
-    passport,
-    employers: employers ?? [],
-    opportunity: { title: role_title, company, description },
-  });
+  try {
+    const result = await prepareInterview({
+      passport,
+      employers: employers ?? [],
+      opportunity: { title: role_title, company, description },
+    });
 
-  // Save to database
-  const { data: prep, error } = await supabase
-    .from("interview_preps")
-    .insert({
-      user_id: user.id,
-      opportunity_id: opportunityId || null,
-      company,
-      role_title,
-      likely_questions: result.likely_questions,
-      star_examples: result.star_examples,
-      company_research: result.company_research,
-      questions_to_ask: result.questions_to_ask,
-    })
-    .select()
-    .single();
+    // Save to database
+    const { data: prep, error } = await supabase
+      .from("interview_preps")
+      .insert({
+        user_id: user.id,
+        opportunity_id: opportunityId || null,
+        company,
+        role_title,
+        likely_questions: result.likely_questions,
+        star_examples: result.star_examples,
+        company_research: result.company_research,
+        questions_to_ask: result.questions_to_ask,
+      })
+      .select()
+      .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json({ data: prep });
+    return NextResponse.json({ data: prep });
+  } catch (error) {
+    console.error("Interview prep failed:", error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Interview prep failed" },
+      { status: 500 },
+    );
+  }
 }

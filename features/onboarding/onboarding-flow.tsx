@@ -19,6 +19,7 @@ export function OnboardingFlow() {
   const [step, setStep] = useState<Step>("welcome");
   const [loading, setLoading] = useState(false);
   const [cvText, setCvText] = useState("");
+  const [cvFileName, setCvFileName] = useState<string | null>(null);
   const [parsing, setParsing] = useState(false);
   const [goals, setGoals] = useState({
     target_role_title: "",
@@ -99,20 +100,36 @@ export function OnboardingFlow() {
   }
 
   async function handleFileUpload(file: File) {
+    setCvFileName(file.name);
+
     if (file.name.endsWith(".txt")) {
       const text = await file.text();
       setCvText(text);
       return;
     }
 
-    // Upload file
+    // Upload file and extract text
     const formData = new FormData();
     formData.append("file", file);
 
     try {
-      await fetch("/api/cv/upload", { method: "POST", body: formData });
-      toast.success("CV uploaded! Paste the text content to parse it.");
+      const res = await fetch("/api/cv/upload", { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setCvFileName(null);
+        toast.error(data.error || "Upload failed");
+        return;
+      }
+
+      if (data.extractedText) {
+        setCvText(data.extractedText);
+        toast.success("CV uploaded and text extracted!");
+      } else {
+        toast.success("CV uploaded! Paste the text content below to parse it.");
+      }
     } catch {
+      setCvFileName(null);
       toast.error("Upload failed");
     }
   }
@@ -168,7 +185,7 @@ export function OnboardingFlow() {
               </p>
             </div>
 
-            <FileUpload onFileSelect={handleFileUpload} className="mb-6" />
+            <FileUpload onFileSelect={handleFileUpload} selectedFileName={cvFileName} className="mb-6" />
 
             <div className="mb-6">
               <Textarea

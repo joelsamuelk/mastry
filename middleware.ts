@@ -9,6 +9,10 @@ const protectedPrefixes = [
   "/upload",
   "/goals",
   "/onboarding",
+  "/opportunities",
+  "/applications",
+  "/visa",
+  "/interview",
 ];
 
 function isProtectedPath(pathname: string) {
@@ -28,6 +32,13 @@ export async function middleware(request: NextRequest) {
   const env = getSupabaseEnv();
 
   if (!env) {
+    const pathname = request.nextUrl.pathname;
+    // If env is missing, only allow public pages — fail closed for protected routes
+    if (isProtectedPath(pathname) || pathname === "/onboarding") {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = "/login";
+      return NextResponse.redirect(redirectUrl);
+    }
     return NextResponse.next();
   }
 

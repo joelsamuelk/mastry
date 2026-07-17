@@ -55,21 +55,28 @@ export function DashboardPage() {
         return;
       }
 
-      const [passportRes, employersRes, educationRes, goalsRes] = await Promise.all([
-        supabase
-          .from("career_passports")
-          .select("*")
-          .eq("user_id", user.id)
-          .maybeSingle(),
-        supabase
-          .from("employers")
-          .select("*")
-          .eq("passport_id", user.id)
-          .order("start_date", { ascending: false }),
-        supabase
-          .from("education")
-          .select("*")
-          .eq("passport_id", user.id),
+      const passportRes = await supabase
+        .from("career_passports")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      const passportId = passportRes.data?.id;
+
+      const [employersRes, educationRes, goalsRes] = await Promise.all([
+        passportId
+          ? supabase
+              .from("employers")
+              .select("*")
+              .eq("passport_id", passportId)
+              .order("start_date", { ascending: false })
+          : Promise.resolve({ data: [] as Employer[] }),
+        passportId
+          ? supabase
+              .from("education")
+              .select("*")
+              .eq("passport_id", passportId)
+          : Promise.resolve({ data: [] as Education[] }),
         supabase
           .from("career_goals")
           .select("*")

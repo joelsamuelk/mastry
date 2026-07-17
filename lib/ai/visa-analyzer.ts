@@ -78,5 +78,9 @@ export async function analyzeVisa(input: VisaInput): Promise<VisaAnalysis> {
   const text = response.choices[0]?.message?.content;
   if (!text) throw new Error("No response from AI");
 
-  return JSON.parse(text) as VisaAnalysis;
+  try {
+    return JSON.parse(text) as VisaAnalysis;
+  } catch {
+    throw new Error("AI returned invalid JSON — please try again");
+  }
 }

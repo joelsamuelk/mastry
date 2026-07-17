@@ -44,17 +44,21 @@ export function VisaPage() {
     }
 
     setLoading(true);
-    const res = await fetch("/api/visa", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nationality }),
-    });
+    try {
+      const res = await fetch("/api/visa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nationality }),
+      });
 
-    const json = await res.json();
-    if (res.ok) {
-      setAnalysis(json.data);
-    } else {
-      toast.error(json.error);
+      const json = await res.json();
+      if (res.ok) {
+        setAnalysis(json.data);
+      } else {
+        toast.error(json.error);
+      }
+    } catch {
+      toast.error("Failed to analyze visa options");
     }
     setLoading(false);
   }

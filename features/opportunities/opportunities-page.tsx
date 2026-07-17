@@ -84,9 +84,13 @@ export function OpportunitiesPage() {
   }, []);
 
   async function loadOpportunities() {
-    const res = await fetch("/api/opportunities");
-    const json = await res.json();
-    setOpportunities(json.data ?? []);
+    try {
+      const res = await fetch("/api/opportunities");
+      const json = await res.json();
+      setOpportunities(json.data ?? []);
+    } catch {
+      toast.error("Failed to load opportunities");
+    }
     setLoading(false);
   }
 
@@ -96,47 +100,55 @@ export function OpportunitiesPage() {
       return;
     }
 
-    const res = await fetch("/api/opportunities", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...form,
-        salary_min: form.salary_min ? Number(form.salary_min) : null,
-        salary_max: form.salary_max ? Number(form.salary_max) : null,
-        remote_type: form.remote_type || null,
-      }),
-    });
+    try {
+      const res = await fetch("/api/opportunities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          salary_min: form.salary_min ? Number(form.salary_min) : null,
+          salary_max: form.salary_max ? Number(form.salary_max) : null,
+          remote_type: form.remote_type || null,
+        }),
+      });
 
-    const json = await res.json();
-    if (res.ok) {
-      setOpportunities((prev) => [json.data, ...prev]);
-      setForm({ title: "", company: "", location: "", salary_min: "", salary_max: "", remote_type: "", description: "", url: "" });
-      setShowForm(false);
-      toast.success("Opportunity saved");
-    } else {
-      toast.error(json.error);
+      const json = await res.json();
+      if (res.ok) {
+        setOpportunities((prev) => [json.data, ...prev]);
+        setForm({ title: "", company: "", location: "", salary_min: "", salary_max: "", remote_type: "", description: "", url: "" });
+        setShowForm(false);
+        toast.success("Opportunity saved");
+      } else {
+        toast.error(json.error);
+      }
+    } catch {
+      toast.error("Failed to save opportunity");
     }
   }
 
   async function handleScore(id: string) {
     setScoring(id);
-    const res = await fetch("/api/opportunities/match", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ opportunityId: id }),
-    });
+    try {
+      const res = await fetch("/api/opportunities/match", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ opportunityId: id }),
+      });
 
-    const json = await res.json();
-    if (res.ok) {
-      setOpportunities((prev) =>
-        prev.map((o) =>
-          o.id === id ? { ...o, match_score: json.score, match_breakdown: json.breakdown } : o
-        )
-      );
-      setExpandedId(id);
-      toast.success(`Match score: ${json.score}%`);
-    } else {
-      toast.error(json.error);
+      const json = await res.json();
+      if (res.ok) {
+        setOpportunities((prev) =>
+          prev.map((o) =>
+            o.id === id ? { ...o, match_score: json.score, match_breakdown: json.breakdown } : o
+          )
+        );
+        setExpandedId(id);
+        toast.success(`Match score: ${json.score}%`);
+      } else {
+        toast.error(json.error);
+      }
+    } catch {
+      toast.error("Failed to score match");
     }
     setScoring(null);
   }

@@ -55,19 +55,23 @@ export function ApplicationsPage() {
 
   async function handleGenerate(opportunityId: string, type: "cover_letter" | "outreach_message") {
     setGenerating(`${opportunityId}-${type}`);
-    const res = await fetch("/api/applications/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ opportunityId, type }),
-    });
+    try {
+      const res = await fetch("/api/applications/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ opportunityId, type }),
+      });
 
-    const json = await res.json();
-    if (res.ok) {
-      setMaterials((prev) => [json.data, ...prev]);
-      setExpandedId(json.data.id);
-      toast.success(`${type === "cover_letter" ? "Cover letter" : "Outreach message"} generated`);
-    } else {
-      toast.error(json.error);
+      const json = await res.json();
+      if (res.ok) {
+        setMaterials((prev) => [json.data, ...prev]);
+        setExpandedId(json.data.id);
+        toast.success(`${type === "cover_letter" ? "Cover letter" : "Outreach message"} generated`);
+      } else {
+        toast.error(json.error);
+      }
+    } catch {
+      toast.error("Failed to generate content");
     }
     setGenerating(null);
   }

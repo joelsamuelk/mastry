@@ -61,20 +61,24 @@ export function InterviewPage() {
 
   async function handlePrepare(opportunityId: string | null, company: string, role_title: string) {
     setGenerating(true);
-    const res = await fetch("/api/interview", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ opportunityId, company, role_title }),
-    });
+    try {
+      const res = await fetch("/api/interview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ opportunityId, company, role_title }),
+      });
 
-    const json = await res.json();
-    if (res.ok) {
-      setPreps((prev) => [json.data, ...prev]);
-      setActivePrep(json.data);
-      setActiveTab("questions");
-      toast.success("Interview prep ready");
-    } else {
-      toast.error(json.error);
+      const json = await res.json();
+      if (res.ok) {
+        setPreps((prev) => [json.data, ...prev]);
+        setActivePrep(json.data);
+        setActiveTab("questions");
+        toast.success("Interview prep ready");
+      } else {
+        toast.error(json.error);
+      }
+    } catch {
+      toast.error("Failed to generate interview prep");
     }
     setGenerating(false);
   }

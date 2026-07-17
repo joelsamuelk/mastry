@@ -9,7 +9,12 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await request.json();
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
   const { nationality } = body;
 
   // Fetch passport and goals
@@ -22,15 +27,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Complete your Career Passport first" }, { status: 400 });
   }
 
-  const analysis = await analyzeVisa({
-    nationality: nationality || null,
-    target_locations: goalsRes.data?.preferred_locations ?? [],
-    current_role: passportRes.data.current_role_title,
-    years_experience: passportRes.data.years_experience,
-    seniority_level: passportRes.data.seniority_level,
-    skills: passportRes.data.skills,
-    requires_sponsorship: goalsRes.data?.requires_sponsorship ?? false,
-  });
+  try {
+    const analysis = await analyzeVisa({
+      nationality: nationality || null,
+      target_locations: goalsRes.data?.preferred_locations ?? [],
+      current_role: passportRes.data.current_role_title,
+      years_experience: passportRes.data.years_experience,
+      seniority_level: passportRes.data.seniority_level,
+      skills: passportRes.data.skills,
+      requires_sponsorship: goalsRes.data?.requires_sponsorship ?? false,
+    });
 
-  return NextResponse.json({ data: analysis });
+    return NextResponse.json({ data: analysis });
+  } catch (error) {
+    console.error("Visa analysis failed:", error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Visa analysis failed" },
+      { status: 500 },
+    );
+  }
 }

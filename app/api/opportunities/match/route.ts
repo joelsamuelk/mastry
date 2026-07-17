@@ -9,7 +9,14 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { opportunityId } = await request.json();
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  const { opportunityId } = body;
   if (!opportunityId) return NextResponse.json({ error: "opportunityId required" }, { status: 400 });
 
   // Fetch passport, goals, and opportunity in parallel
@@ -26,17 +33,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Opportunity not found" }, { status: 404 });
   }
 
-  const { score, breakdown } = await scoreMatch({
-    passport: passportRes.data,
-    goals: goalsRes.data,
-    opportunity: oppRes.data,
-  });
+  try {
+    const { score, breakdown } = await scoreMatch({
+      passport: passportRes.data,
+      goals: goalsRes.data,
+      opportunity: oppRes.data,
+    });
 
-  // Save scores to the opportunity
-  await supabase
-    .from("opportunities")
-    .update({ match_score: score, match_breakdown: breakdown, updated_at: new Date().toISOString() })
-    .eq("id", opportunityId);
+    // Save scores to the opportunity
+    await supabase
+      .from("opportunities")
+      .update({ match_score: score, match_breakdown: breakdown, updated_at: new Date().toISOString() })
+      .eq("id", opportunityId);
 
-  return NextResponse.json({ score, breakdown });
+    return NextResponse.json({ score, breakdown });
+  } catch (error) {
+    console.error("Match scoring failed:", error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Match scoring failed" },
+      { status: 500 },
+    );
+  }
 }

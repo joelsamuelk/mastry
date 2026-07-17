@@ -93,5 +93,9 @@ export async function prepareInterview(input: InterviewPrepInput): Promise<Inter
   const text = response.choices[0]?.message?.content;
   if (!text) throw new Error("No response from AI");
 
-  return JSON.parse(text) as InterviewPrepResult;
+  try {
+    return JSON.parse(text) as InterviewPrepResult;
+  } catch {
+    throw new Error("AI returned invalid JSON — please try again");
+  }
 }

@@ -106,5 +106,19 @@ export async function parseCV(cvText: string): Promise<ParsedCV> {
     throw new Error("No response from AI");
   }
 
-  return JSON.parse(text) as ParsedCV;
+  let parsed: ParsedCV;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error("AI returned invalid JSON — please try again");
+  }
+
+  // Ensure required array fields have defaults
+  parsed.skills = Array.isArray(parsed.skills) ? parsed.skills : [];
+  parsed.languages = Array.isArray(parsed.languages) ? parsed.languages : [];
+  parsed.employers = Array.isArray(parsed.employers) ? parsed.employers : [];
+  parsed.education = Array.isArray(parsed.education) ? parsed.education : [];
+  parsed.certifications = Array.isArray(parsed.certifications) ? parsed.certifications : [];
+
+  return parsed;
 }

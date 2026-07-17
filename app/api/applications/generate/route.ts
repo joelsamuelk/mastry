@@ -10,7 +10,12 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await request.json();
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
   const { opportunityId, type } = body as { opportunityId: string; type: MaterialType };
 
   if (!opportunityId || !type) {
@@ -36,31 +41,39 @@ export async function POST(request: Request) {
     .eq("passport_id", passportRes.data.id)
     .order("start_date", { ascending: false });
 
-  const content = await generateCoverLetter({
-    passport: passportRes.data,
-    employers: employers ?? [],
-    opportunity: oppRes.data,
-    type: type === "outreach_message" ? "outreach_message" : "cover_letter",
-  });
+  try {
+    const content = await generateCoverLetter({
+      passport: passportRes.data,
+      employers: employers ?? [],
+      opportunity: oppRes.data,
+      type: type === "outreach_message" ? "outreach_message" : "cover_letter",
+    });
 
-  const title = type === "cover_letter"
-    ? `Cover Letter — ${oppRes.data.title} at ${oppRes.data.company}`
-    : `Outreach — ${oppRes.data.title} at ${oppRes.data.company}`;
+    const title = type === "cover_letter"
+      ? `Cover Letter — ${oppRes.data.title} at ${oppRes.data.company}`
+      : `Outreach — ${oppRes.data.title} at ${oppRes.data.company}`;
 
-  // Save to database
-  const { data: material, error } = await supabase
-    .from("application_materials")
-    .insert({
-      user_id: user.id,
-      opportunity_id: opportunityId,
-      type,
-      title,
-      content,
-    })
-    .select()
-    .single();
+    // Save to database
+    const { data: material, error } = await supabase
+      .from("application_materials")
+      .insert({
+        user_id: user.id,
+        opportunity_id: opportunityId,
+        type,
+        title,
+        content,
+      })
+      .select()
+      .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json({ data: material });
+    return NextResponse.json({ data: material });
+  } catch (error) {
+    console.error("Content generation failed:", error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Content generation failed" },
+      { status: 500 },
+    );
+  }
 }

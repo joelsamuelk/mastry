@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { PDFParse } from "pdf-parse";
 
 export async function POST(request: Request) {
   const supabase = await createSupabaseServerClient();
@@ -31,11 +32,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
   }
 
+  // Read file buffer upfront — the File blob may not be re-readable after Supabase consumes it
+  const fileBuffer = Buffer.from(await file.arrayBuffer());
+
   const fileName = `${user.id}/${Date.now()}.${ext}`;
 
   const { error: uploadError } = await supabase.storage
     .from("cv-uploads")
-    .upload(fileName, file, {
+    .upload(fileName, fileBuffer, {
       contentType: file.type,
       upsert: true,
     });
@@ -68,5 +72,21 @@ export async function POST(request: Request) {
     });
   }
 
-  return NextResponse.json({ success: true, fileName });
+  // Extract text from the file when possible
+  let extractedText: string | null = null;
+
+  if (ext === "pdf") {
+    try {
+      const parser = new PDFParse({ data: new Uint8Array(fileBuffer) });
+      const result = await parser.getText();
+      extractedText = result.text;
+      await parser.destroy();
+    } catch (e) {
+      console.error("PDF text extraction failed:", e);
+    }
+  } else if (ext === "txt") {
+    extractedText = fileBuffer.toString("utf-8");
+  }
+
+  return NextResponse.json({ success: true, fileName, extractedText });
 }

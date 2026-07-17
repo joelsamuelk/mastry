@@ -14,10 +14,13 @@ type Step = "upload" | "text-input" | "parsing" | "complete" | "error";
 export function CVUploadPage() {
   const [step, setStep] = useState<Step>("upload");
   const [cvText, setCvText] = useState("");
+  const [cvFileName, setCvFileName] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   async function handleFileSelect(file: File) {
+    setCvFileName(file.name);
+
     // For PDF files we need server-side parsing, for text files read directly
     if (file.name.endsWith(".txt")) {
       const text = await file.text();
@@ -26,7 +29,7 @@ export function CVUploadPage() {
       return;
     }
 
-    // Upload the file first
+    // Upload the file and extract text
     const formData = new FormData();
     formData.append("file", file);
 
@@ -36,17 +39,22 @@ export function CVUploadPage() {
         body: formData,
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const data = await res.json();
         setError(data.error || "Upload failed");
+        setCvFileName(null);
         setStep("error");
         return;
       }
 
-      // For non-text files, ask user to paste content for now
-      // (PDF parsing would require pdf-parse on server)
+      if (data.extractedText) {
+        setCvText(data.extractedText);
+      }
+
       setStep("text-input");
     } catch {
+      setCvFileName(null);
       setError("Upload failed. Please try again.");
       setStep("error");
     }
@@ -92,7 +100,7 @@ export function CVUploadPage() {
 
       {step === "upload" && (
         <div className="space-y-6">
-          <FileUpload onFileSelect={handleFileSelect} />
+          <FileUpload onFileSelect={handleFileSelect} selectedFileName={cvFileName} />
 
           <div className="flex items-center gap-3">
             <div className="h-px flex-1 bg-[var(--surface-high)]" />
