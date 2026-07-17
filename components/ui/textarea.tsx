@@ -24,7 +24,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           id={inputId}
           ref={ref}
           className={cn(
-            "min-h-[120px] w-full rounded-2xl bg-[var(--surface-low)] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] transition duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-[rgba(78,69,228,0.35)] focus:bg-white disabled:opacity-60 resize-y",
+            "min-h-[120px] w-full rounded-2xl bg-[var(--surface-low)] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] transition duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)] focus:bg-white disabled:opacity-60 resize-y",
             error && "ring-2 ring-[var(--danger)]",
             className,
           )}

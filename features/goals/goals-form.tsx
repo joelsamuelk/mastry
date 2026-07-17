@@ -153,7 +153,7 @@ export function GoalsForm() {
                 Target seniority
               </label>
               <select
-                className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(78,69,228,0.35)]"
+                className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)]"
                 value={goals.target_seniority || ""}
                 onChange={(e) =>
                   setGoals((g) => ({
@@ -193,7 +193,7 @@ export function GoalsForm() {
                 Remote preference
               </label>
               <select
-                className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(78,69,228,0.35)]"
+                className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)]"
                 value={goals.remote_preference || "any"}
                 onChange={(e) =>
                   setGoals((g) => ({
@@ -248,7 +248,7 @@ export function GoalsForm() {
                     requires_sponsorship: e.target.checked,
                   }))
                 }
-                className="h-5 w-5 rounded accent-[var(--accent)]"
+                className="h-5 w-5 rounded accent-[var(--ink)]"
               />
               <span className="text-sm text-[var(--ink)]">
                 I require visa sponsorship
@@ -265,7 +265,7 @@ export function GoalsForm() {
                     is_actively_looking: e.target.checked,
                   }))
                 }
-                className="h-5 w-5 rounded accent-[var(--accent)]"
+                className="h-5 w-5 rounded accent-[var(--ink)]"
               />
               <span className="text-sm text-[var(--ink)]">
                 I am actively looking for a new role

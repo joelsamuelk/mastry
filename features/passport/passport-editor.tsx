@@ -182,7 +182,7 @@ export function PassportEditor() {
                 Seniority level
               </label>
               <select
-                className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(78,69,228,0.35)]"
+                className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)]"
                 {...register("seniority_level")}
               >
                 <option value="">Select level</option>

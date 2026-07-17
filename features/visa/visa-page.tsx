@@ -91,7 +91,7 @@ export function VisaPage() {
           {/* Overall assessment */}
           <Card>
             <div className="flex items-start gap-3">
-              <Globe className="mt-0.5 h-5 w-5 text-[var(--accent)]" />
+              <Globe className="mt-0.5 h-5 w-5 text-[var(--ink)]" />
               <div>
                 <CardTitle>Overview</CardTitle>
                 <p className="mt-2 text-sm leading-relaxed text-[var(--ink-muted)]">
@@ -136,7 +136,7 @@ export function VisaPage() {
                     {visa.requirements.length > 0 && (
                       <ul className="mt-2 space-y-1">
                         {visa.requirements.map((req, i) => (
-                          <li key={i} className="text-xs text-[var(--muted)] before:content-['•_'] before:text-[var(--accent)]">
+                          <li key={i} className="text-xs text-[var(--muted)] before:content-['•_'] before:text-[var(--ink)]">
                             {req}
                           </li>
                         ))}
@@ -152,12 +152,12 @@ export function VisaPage() {
           {analysis.recommendations.length > 0 && (
             <Card>
               <div className="flex items-center gap-2 mb-4">
-                <Lightbulb className="h-5 w-5 text-[var(--accent)]" />
+                <Lightbulb className="h-5 w-5 text-[var(--ink)]" />
                 <CardTitle>Recommendations</CardTitle>
               </div>
               <ul className="space-y-2">
                 {analysis.recommendations.map((rec, i) => (
-                  <li key={i} className="text-sm text-[var(--ink-muted)] before:content-['→_'] before:text-[var(--accent)]">
+                  <li key={i} className="text-sm text-[var(--ink-muted)] before:content-['→_'] before:text-[var(--ink)]">
                     {rec}
                   </li>
                 ))}

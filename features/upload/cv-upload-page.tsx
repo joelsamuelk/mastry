@@ -135,7 +135,7 @@ export function CVUploadPage() {
 
       {step === "parsing" && (
         <Card className="flex flex-col items-center gap-4 py-12 text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[var(--accent)]" />
+          <Loader2 className="h-8 w-8 animate-spin text-[var(--ink)]" />
           <div>
             <CardTitle>Parsing your CV</CardTitle>
             <p className="mt-1 text-sm text-[var(--ink-muted)]">

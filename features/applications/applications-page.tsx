@@ -143,9 +143,9 @@ export function ApplicationsPage() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {mat.type === "cover_letter" ? (
-                              <FileText className="h-4 w-4 text-[var(--accent)]" />
+                              <FileText className="h-4 w-4 text-[var(--ink)]" />
                             ) : (
-                              <Mail className="h-4 w-4 text-[var(--accent)]" />
+                              <Mail className="h-4 w-4 text-[var(--ink)]" />
                             )}
                             <span className="text-sm font-semibold text-[var(--ink)]">
                               {mat.title}

@@ -19,11 +19,11 @@ export function buttonStyles({
   className?: string;
 }) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(78,69,228,0.35)] disabled:pointer-events-none disabled:opacity-60",
+    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(0,0,0,0.15)] disabled:pointer-events-none disabled:opacity-60",
     variant === "primary" &&
-      "bg-[linear-gradient(145deg,#4e45e4_0%,#4135d8_100%)] text-[var(--on-accent)] shadow-[0_18px_34px_rgba(78,69,228,0.24)] hover:-translate-y-0.5",
+      "bg-[var(--ink)] text-white shadow-[0_1px_3px_rgba(0,0,0,0.12)] hover:-translate-y-0.5",
     variant === "secondary" &&
-      "bg-white text-[var(--ink)] shadow-[0_12px_32px_rgba(45,51,56,0.08)] hover:-translate-y-0.5 hover:bg-[var(--surface-low)]",
+      "bg-white text-[var(--ink)] shadow-[0_1px_3px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:bg-[var(--surface-low)]",
     variant === "ghost" &&
       "bg-transparent text-[var(--ink)] hover:-translate-y-0.5 hover:bg-[var(--surface-low)]",
     variant === "quiet" &&

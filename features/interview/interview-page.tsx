@@ -93,7 +93,7 @@ export function InterviewPage() {
       <SectionHeading
         eyebrow="Interview Coach"
         title="Prepare to impress"
-        description="Get likely questions, STAR examples from your real experience, company research, and questions to ask — all tailored to each role."
+        description="Get likely questions, STAR examples from your real experience, company research, and questions to ask. All tailored to each role."
       />
 
       {/* Generate prep */}
@@ -228,7 +228,7 @@ export function InterviewPage() {
                       { label: "Result", text: star.result },
                     ]).map((part) => (
                       <div key={part.label}>
-                        <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent)]">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[var(--ink)]">
                           {part.label}
                         </span>
                         <p className="mt-1 text-sm text-[var(--ink-muted)]">{part.text}</p>
@@ -247,7 +247,7 @@ export function InterviewPage() {
                 <CardTitle className="mb-3">Key Points</CardTitle>
                 <ul className="space-y-2">
                   {activePrep.company_research.key_points.map((point, i) => (
-                    <li key={i} className="text-sm text-[var(--ink-muted)] before:content-['•_'] before:text-[var(--accent)]">
+                    <li key={i} className="text-sm text-[var(--ink-muted)] before:content-['•_'] before:text-[var(--ink)]">
                       {point}
                     </li>
                   ))}

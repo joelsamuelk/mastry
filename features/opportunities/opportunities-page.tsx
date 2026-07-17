@@ -222,7 +222,7 @@ export function OpportunitiesPage() {
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-[var(--ink)]">Remote type</label>
                 <select
-                  className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(78,69,228,0.35)]"
+                  className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)]"
                   value={form.remote_type}
                   onChange={(e) => setForm((f) => ({ ...f, remote_type: e.target.value }))}
                 >
@@ -332,7 +332,7 @@ export function OpportunitiesPage() {
               {opp.match_score !== null && (
                 <button
                   onClick={() => setExpandedId(expandedId === opp.id ? null : opp.id)}
-                  className="mt-3 text-xs font-medium text-[var(--accent)] hover:underline"
+                  className="mt-3 text-xs font-medium text-[var(--ink)] hover:underline"
                 >
                   {expandedId === opp.id ? "Hide breakdown" : "Show match breakdown"}
                 </button>

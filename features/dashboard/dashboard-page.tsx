@@ -138,8 +138,8 @@ export function DashboardPage() {
 
         {/* Upload CV */}
         <Card className="flex flex-col items-center justify-center gap-4 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(78,69,228,0.08)]">
-            <Upload className="h-6 w-6 text-[var(--accent)]" />
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--surface-low)]">
+            <Upload className="h-6 w-6 text-[var(--ink)]" />
           </div>
           <div>
             <CardTitle>Upload CV</CardTitle>
@@ -194,7 +194,7 @@ export function DashboardPage() {
             href={item.href}
             className="group rounded-[2rem] bg-white p-5 shadow-[0_12px_40px_rgba(45,51,56,0.04)] transition duration-200 ease-out hover:-translate-y-0.5"
           >
-            <item.icon className="mb-3 h-5 w-5 text-[var(--accent)]" />
+            <item.icon className="mb-3 h-5 w-5 text-[var(--ink)]" />
             <div className="text-sm font-semibold text-[var(--ink)]">{item.label}</div>
             <div className="mt-0.5 text-xs text-[var(--ink-muted)]">{item.desc}</div>
           </Link>
@@ -236,7 +236,7 @@ export function DashboardPage() {
 
             <Link
               href="/passport"
-              className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--accent)] hover:underline"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--ink)] hover:underline"
             >
               View full passport
               <ArrowRight className="h-3.5 w-3.5" />

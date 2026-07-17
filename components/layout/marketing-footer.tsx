@@ -3,9 +3,9 @@ import { Brand } from "@/components/brand/brand";
 
 export function MarketingFooter() {
   return (
-    <footer className="mx-auto max-w-5xl px-6 py-16">
-      <div className="flex flex-col items-center gap-6 text-center">
-        <Brand variant="wordmark" size="sm" />
+    <footer className="bg-[#0a0a0a] px-6 py-12">
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 text-center">
+        <Brand variant="wordmark" size="sm" theme="light" />
 
         <nav className="flex items-center gap-6">
           {[
@@ -16,14 +16,14 @@ export function MarketingFooter() {
             <Link
               key={link.label}
               href={link.href}
-              className="text-xs font-medium text-[var(--muted)] transition hover:text-[var(--ink)]"
+              className="text-xs font-medium text-white/40 transition hover:text-white/70"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <p className="text-xs text-[var(--muted)]">
+        <p className="text-xs text-white/25">
           &copy; {new Date().getFullYear()} Mastry. All rights reserved.
         </p>
       </div>

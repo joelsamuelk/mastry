@@ -171,7 +171,7 @@ export function PassportView() {
       {passport.skills.length > 0 && (
         <Card className="mb-6">
           <div className="mb-4 flex items-center gap-2">
-            <Code className="h-4 w-4 text-[var(--accent)]" />
+            <Code className="h-4 w-4 text-[var(--ink)]" />
             <CardTitle>Skills</CardTitle>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -186,7 +186,7 @@ export function PassportView() {
       {passport.languages.length > 0 && (
         <Card className="mb-6">
           <div className="mb-4 flex items-center gap-2">
-            <Globe className="h-4 w-4 text-[var(--accent)]" />
+            <Globe className="h-4 w-4 text-[var(--ink)]" />
             <CardTitle>Languages</CardTitle>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -201,7 +201,7 @@ export function PassportView() {
       {employers.length > 0 && (
         <Card className="mb-6">
           <div className="mb-6 flex items-center gap-2">
-            <Briefcase className="h-4 w-4 text-[var(--accent)]" />
+            <Briefcase className="h-4 w-4 text-[var(--ink)]" />
             <CardTitle>Experience</CardTitle>
           </div>
           <div className="space-y-8">
@@ -228,7 +228,7 @@ export function PassportView() {
                 {emp.achievements.length > 0 && (
                   <ul className="mt-2 space-y-1">
                     {emp.achievements.map((ach, i) => (
-                      <li key={i} className="text-sm text-[var(--ink-muted)] before:content-['•_'] before:text-[var(--accent)]">
+                      <li key={i} className="text-sm text-[var(--ink-muted)] before:content-['•_'] before:text-[var(--ink)]">
                         {ach}
                       </li>
                     ))}
@@ -253,7 +253,7 @@ export function PassportView() {
       {education.length > 0 && (
         <Card className="mb-6">
           <div className="mb-6 flex items-center gap-2">
-            <GraduationCap className="h-4 w-4 text-[var(--accent)]" />
+            <GraduationCap className="h-4 w-4 text-[var(--ink)]" />
             <CardTitle>Education</CardTitle>
           </div>
           <div className="space-y-6">
@@ -280,7 +280,7 @@ export function PassportView() {
       {certifications.length > 0 && (
         <Card>
           <div className="mb-6 flex items-center gap-2">
-            <Award className="h-4 w-4 text-[var(--accent)]" />
+            <Award className="h-4 w-4 text-[var(--ink)]" />
             <CardTitle>Certifications</CardTitle>
           </div>
           <div className="space-y-4">

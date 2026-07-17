@@ -127,7 +127,7 @@ export function OnboardingFlow() {
               key={s}
               className={`h-1.5 w-12 rounded-full transition ${
                 (["welcome", "cv", "goals", "complete"] as Step[]).indexOf(step) >= i
-                  ? "bg-[var(--accent)]"
+                  ? "bg-[var(--ink)]"
                   : "bg-[var(--surface-high)]"
               }`}
             />
@@ -157,8 +157,8 @@ export function OnboardingFlow() {
         {step === "cv" && (
           <div>
             <div className="mb-8 text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[rgba(78,69,228,0.08)]">
-                <Upload className="h-5 w-5 text-[var(--accent)]" />
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--surface-low)]">
+                <Upload className="h-5 w-5 text-[var(--ink)]" />
               </div>
               <h2 className="font-display text-2xl font-bold text-[var(--ink)]">
                 Upload your CV
@@ -234,7 +234,7 @@ export function OnboardingFlow() {
                     Target seniority
                   </label>
                   <select
-                    className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(78,69,228,0.35)]"
+                    className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)]"
                     value={goals.target_seniority}
                     onChange={(e) =>
                       setGoals((g) => ({ ...g, target_seniority: e.target.value }))
@@ -253,7 +253,7 @@ export function OnboardingFlow() {
                     Remote preference
                   </label>
                   <select
-                    className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(78,69,228,0.35)]"
+                    className="h-12 w-full rounded-2xl bg-[var(--surface-low)] px-4 text-sm text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)]"
                     value={goals.remote_preference}
                     onChange={(e) =>
                       setGoals((g) => ({ ...g, remote_preference: e.target.value }))
@@ -275,7 +275,7 @@ export function OnboardingFlow() {
                         requires_sponsorship: e.target.checked,
                       }))
                     }
-                    className="h-5 w-5 rounded accent-[var(--accent)]"
+                    className="h-5 w-5 rounded accent-[var(--ink)]"
                   />
                   <span className="text-sm text-[var(--ink)]">
                     I require visa sponsorship

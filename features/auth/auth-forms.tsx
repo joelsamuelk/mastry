@@ -96,7 +96,7 @@ export function LoginForm() {
 
       <p className="mt-6 text-center text-sm text-[var(--ink-muted)]">
         Don&apos;t have an account?{" "}
-        <Link href="/signup" className="font-semibold text-[var(--accent)] hover:underline">
+        <Link href="/signup" className="font-semibold text-[var(--ink)] hover:underline">
           Sign up
         </Link>
       </p>
@@ -193,7 +193,7 @@ export function SignupForm() {
 
       <p className="mt-6 text-center text-sm text-[var(--ink-muted)]">
         Already have an account?{" "}
-        <Link href="/login" className="font-semibold text-[var(--accent)] hover:underline">
+        <Link href="/login" className="font-semibold text-[var(--ink)] hover:underline">
           Sign in
         </Link>
       </p>

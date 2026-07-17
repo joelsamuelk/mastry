@@ -2,16 +2,16 @@
 @import "tailwindcss";
 
 :root {
-  --surface: #f9f9fb;
-  --surface-low: #f2f4f6;
-  --surface-high: #e4e9ee;
+  --surface: #fafafa;
+  --surface-low: #f2f2f2;
+  --surface-high: #e5e5e5;
   --surface-ghost: rgba(255, 255, 255, 0.8);
-  --ink: #2d3338;
-  --ink-muted: #5f6971;
-  --muted: #99a1ab;
-  --accent: #4e45e4;
-  --accent-dim: #4135d8;
-  --on-accent: #fbf7ff;
+  --ink: #111111;
+  --ink-muted: #555555;
+  --muted: #999999;
+  --accent: #111111;
+  --accent-dim: #000000;
+  --on-accent: #ffffff;
   --success: #10b981;
   --warning: #f59e0b;
   --danger: #ef4444;
@@ -23,10 +23,7 @@ html {
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(78, 69, 228, 0.08), transparent 28%),
-    radial-gradient(circle at top right, rgba(78, 69, 228, 0.06), transparent 30%),
-    var(--surface);
+  background: var(--surface);
   color: var(--ink);
   font-family:
     "Inter",
@@ -53,7 +50,7 @@ button {
 }
 
 .eyebrow {
-  color: var(--accent);
+  color: var(--muted);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.24em;
@@ -62,21 +59,21 @@ button {
 
 .glass-panel {
   border-radius: 999px;
-  background: rgba(249, 249, 251, 0.8);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
-  box-shadow: 0 12px 40px rgba(45, 51, 56, 0.04);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .surface-panel {
   border-radius: 32px;
   background: white;
-  box-shadow: 0 12px 40px rgba(45, 51, 56, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .soft-grid {
   background-image:
-    linear-gradient(rgba(172, 179, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(172, 179, 184, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
   background-position: center;
   background-size: 24px 24px;
 }
@@ -86,7 +83,7 @@ button {
 }
 
 ::selection {
-  background: rgba(78, 69, 228, 0.18);
+  background: rgba(0, 0, 0, 0.12);
 }
 
 /* ── scroll-reveal ── */

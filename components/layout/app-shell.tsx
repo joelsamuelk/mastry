@@ -67,7 +67,7 @@ export function AppShell({ children, userName }: AppShellProps) {
               className={cn(
                 "flex flex-col items-center gap-1 rounded-2xl px-3 py-2 text-[10px] font-semibold transition",
                 isActive
-                  ? "text-[var(--accent)]"
+                  ? "text-[var(--ink)]"
                   : "text-[var(--muted)]",
               )}
             >

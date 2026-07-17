@@ -63,13 +63,13 @@ export function FileUpload({
         onDrop={handleDrop}
         className={cn(
           "flex cursor-pointer flex-col items-center justify-center gap-4 rounded-[2rem] bg-[var(--surface-low)] p-12 transition duration-200 ease-out",
-          isDragging && "bg-[rgba(78,69,228,0.06)] ring-2 ring-[var(--accent)]",
+          isDragging && "bg-[var(--surface-high)] ring-2 ring-[var(--ink)]",
           !isDragging && "hover:bg-[var(--surface-high)]",
           disabled && "pointer-events-none opacity-60",
         )}
       >
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-[0_12px_40px_rgba(45,51,56,0.04)]">
-          <Upload className="h-6 w-6 text-[var(--accent)]" />
+          <Upload className="h-6 w-6 text-[var(--ink)]" />
         </div>
         <div className="text-center">
           <p className="text-sm font-semibold text-[var(--ink)]">
