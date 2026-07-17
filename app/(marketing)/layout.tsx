@@ -1,0 +1,13 @@
+import type { ReactNode } from "react";
+import { MarketingHeader } from "@/components/layout/marketing-header";
+import { MarketingFooter } from "@/components/layout/marketing-footer";
+
+export default function MarketingLayout({ children }: { children: ReactNode }) {
+  return (
+    <>
+      <MarketingHeader />
+      {children}
+      <MarketingFooter />
+    </>
+  );
+}

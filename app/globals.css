@@ -12,6 +12,9 @@
   --accent: #4e45e4;
   --accent-dim: #4135d8;
   --on-accent: #fbf7ff;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
 }
 
 html {

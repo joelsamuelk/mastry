@@ -1,47 +1,58 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+
 interface ProgressRingProps {
   value: number;
-  label: string;
+  size?: number;
+  strokeWidth?: number;
+  className?: string;
+  label?: string;
 }
 
-export function ProgressRing({ value, label }: ProgressRingProps) {
-  const radius = 34;
+export function ProgressRing({
+  value,
+  size = 80,
+  strokeWidth = 2,
+  className,
+  label,
+}: ProgressRingProps) {
+  const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const dashOffset = circumference - (value / 100) * circumference;
+  const offset = circumference - (value / 100) * circumference;
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="relative grid size-24 place-items-center">
-        <svg className="size-24 -rotate-90" viewBox="0 0 80 80" aria-hidden="true">
-          <circle
-            cx="40"
-            cy="40"
-            r={radius}
-            fill="none"
-            stroke="var(--surface-high)"
-            strokeWidth="2"
-          />
-          <circle
-            cx="40"
-            cy="40"
-            r={radius}
-            fill="none"
-            stroke="var(--accent)"
-            strokeWidth="2"
-            strokeDasharray={circumference}
-            strokeDashoffset={dashOffset}
-            strokeLinecap="round"
-          />
-        </svg>
-        <div className="absolute text-center">
-          <div className="font-display text-xl font-bold tracking-[-0.05em] text-[var(--ink)]">
-            {value}%
-          </div>
-          <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-            Mastery
-          </div>
-        </div>
+    <div className={cn("relative inline-flex items-center justify-center", className)}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="var(--surface-high)"
+          strokeWidth={strokeWidth}
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth={strokeWidth}
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          strokeLinecap="round"
+          className="transition-[stroke-dashoffset] duration-500 ease-out"
+        />
+      </svg>
+      <div className="absolute flex flex-col items-center">
+        <span className="font-display text-lg font-bold text-[var(--ink)]">
+          {Math.round(value)}%
+        </span>
+        {label && (
+          <span className="text-[10px] text-[var(--muted)]">{label}</span>
+        )}
       </div>
-      <p className="text-sm font-semibold text-[var(--ink)]">{label}</p>
     </div>
   );
 }

@@ -1,5 +1,8 @@
-import { UserDashboard } from "@/features/dashboard/user-dashboard";
+import type { Metadata } from "next";
+import { DashboardPage } from "@/features/dashboard/dashboard-page";
 
-export default function DashboardPage() {
-  return <UserDashboard />;
+export const metadata: Metadata = { title: "Dashboard" };
+
+export default function Page() {
+  return <DashboardPage />;
 }

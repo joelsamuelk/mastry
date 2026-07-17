@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-type ButtonVariant = "primary" | "secondary" | "ghost" | "quiet";
+type ButtonVariant = "primary" | "secondary" | "ghost" | "quiet" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -28,6 +28,8 @@ export function buttonStyles({
       "bg-transparent text-[var(--ink)] hover:-translate-y-0.5 hover:bg-[var(--surface-low)]",
     variant === "quiet" &&
       "bg-[var(--surface-low)] text-[var(--ink)] hover:-translate-y-0.5 hover:bg-[var(--surface-high)]",
+    variant === "danger" &&
+      "bg-[var(--danger)] text-white hover:-translate-y-0.5",
     size === "sm" && "h-10 px-4 text-sm",
     size === "md" && "h-12 px-5 text-sm",
     size === "lg" && "h-14 px-6 text-base",

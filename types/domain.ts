@@ -1,140 +1,115 @@
-export type AppRole = "mentee" | "mentor" | "admin";
+export type ExtractionStatus = "pending" | "processing" | "completed" | "failed";
+export type EvidenceType = "publication" | "talk" | "project" | "award" | "patent" | "other";
+export type SeniorityLevel = "junior" | "mid" | "senior" | "lead" | "principal" | "director" | "vp" | "c_level";
+export type RemotePreference = "remote" | "hybrid" | "onsite" | "any";
 
-export type MentorStatus =
-  | "draft"
-  | "pending_review"
-  | "approved"
-  | "rejected"
-  | "suspended";
-
-export type GoalStatus = "draft" | "active" | "completed" | "archived";
-
-export type BookingStatus =
-  | "pending"
-  | "confirmed"
-  | "completed"
-  | "cancelled"
-  | "refunded"
-  | "no_show";
-
-export interface FocusArea {
+export interface Profile {
   id: string;
-  slug: string;
-  label: string;
-  category: "discipline" | "industry" | "goal";
+  full_name: string | null;
+  email: string;
+  avatar_url: string | null;
+  headline: string | null;
+  timezone: string | null;
+  onboarding_completed_at: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface SessionType {
+export interface CareerPassport {
   id: string;
-  title: string;
-  description: string;
-  durationMinutes: number;
-  priceUsd: number;
-  deliveryMode: "video" | "async";
-  featured?: boolean;
+  user_id: string;
+  career_summary: string | null;
+  current_role_title: string | null;
+  current_company: string | null;
+  years_experience: number | null;
+  seniority_level: SeniorityLevel | null;
+  skills: string[];
+  languages: string[];
+  raw_cv_url: string | null;
+  raw_cv_text: string | null;
+  ai_extraction_status: ExtractionStatus;
+  ai_extraction_result: Record<string, unknown> | null;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface MentorBadge {
+export interface Employer {
   id: string;
-  label: string;
-  tone?: "accent" | "neutral";
+  passport_id: string;
+  company_name: string;
+  role_title: string;
+  start_date: string | null;
+  end_date: string | null;
+  is_current: boolean;
+  description: string | null;
+  achievements: string[];
+  technologies: string[];
+  people_managed: number | null;
+  created_at: string;
 }
 
-export interface MentorProfileStat {
+export interface Education {
   id: string;
-  value: string;
-  label: string;
+  passport_id: string;
+  institution: string;
+  degree: string | null;
+  field_of_study: string | null;
+  start_year: number | null;
+  end_year: number | null;
+  created_at: string;
 }
 
-export interface MentorExpertise {
+export interface Certification {
   id: string;
-  title: string;
-  description: string;
-  eyebrow?: string;
-  icon?: "sparkles" | "briefcase" | "target" | "rocket";
-}
-
-export interface MentorCareerEntry {
-  id: string;
-  company: string;
-  role: string;
-  period: string;
-  summary: string;
-}
-
-export interface MentorAvailabilitySlot {
-  id: string;
-  startsAt: string;
-  available: boolean;
-}
-
-export interface MentorAvailabilityDay {
-  id: string;
-  isoDate: string;
-  slots: MentorAvailabilitySlot[];
-}
-
-export interface Mentor {
-  id: string;
-  slug: string;
+  passport_id: string;
   name: string;
-  headline: string;
-  company: string;
-  location: string;
-  bio: string;
-  status: MentorStatus;
-  experienceLabel: string;
-  rating: number;
-  reviewCount: number;
-  hourlyRateUsd: number;
-  avatarGradient: string;
-  initials: string;
-  focusAreas: FocusArea[];
-  sessionTypes: SessionType[];
-  featuredQuote?: string;
-  badges?: MentorBadge[];
-  profileStats?: MentorProfileStat[];
-  expertise?: MentorExpertise[];
-  careerHistory?: MentorCareerEntry[];
-  availability?: MentorAvailabilityDay[];
+  issuer: string | null;
+  date_obtained: string | null;
+  expiry_date: string | null;
+  credential_url: string | null;
+  created_at: string;
 }
 
-export interface GrowthMilestone {
+export interface CareerEvidence {
   id: string;
+  passport_id: string;
+  type: EvidenceType;
   title: string;
-  description: string;
-  state: "complete" | "active" | "locked";
-  masteryPercent: number;
-  tags: string[];
+  description: string | null;
+  url: string | null;
+  date: string | null;
+  created_at: string;
 }
 
-export interface GrowthPlan {
+export interface CareerGoals {
   id: string;
-  title: string;
-  summary: string;
-  nextStep: string;
-  weeklyFocus: string;
-  milestones: GrowthMilestone[];
+  user_id: string;
+  target_role_title: string | null;
+  target_seniority: SeniorityLevel | null;
+  preferred_industries: string[];
+  preferred_locations: string[];
+  remote_preference: RemotePreference;
+  salary_min: number | null;
+  salary_currency: string | null;
+  requires_sponsorship: boolean;
+  is_actively_looking: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface CuratorInsight {
+export interface ActivityLogEntry {
   id: string;
-  eyebrow: string;
-  title: string;
-  body: string;
-  actions: string[];
+  user_id: string;
+  action: string;
+  entity_type: string | null;
+  entity_id: string | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
 }
 
-export interface Resource {
-  id: string;
-  title: string;
-  category: string;
-  summary: string;
-  completionPercent?: number;
-}
-
-export interface FaqItem {
-  id: string;
-  question: string;
-  answer: string;
+export interface FullPassport extends CareerPassport {
+  employers: Employer[];
+  education: Education[];
+  certifications: Certification[];
+  evidence: CareerEvidence[];
 }

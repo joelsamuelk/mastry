@@ -1,5 +1,8 @@
-import { SignUpForm } from "@/features/profile/auth-forms";
+import type { Metadata } from "next";
+import { SignupForm } from "@/features/auth/auth-forms";
+
+export const metadata: Metadata = { title: "Sign up" };
 
 export default function SignupPage() {
-  return <SignUpForm />;
+  return <SignupForm />;
 }

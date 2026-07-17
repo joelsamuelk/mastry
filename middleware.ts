@@ -5,13 +5,10 @@ import { getSupabaseEnv } from "@/lib/supabase/config";
 const authPages = new Set(["/login", "/signup"]);
 const protectedPrefixes = [
   "/dashboard",
-  "/mentors",
-  "/sessions",
-  "/guidance",
-  "/resources",
-  "/profile",
-  "/mentor",
-  "/admin",
+  "/passport",
+  "/upload",
+  "/goals",
+  "/onboarding",
 ];
 
 function isProtectedPath(pathname: string) {
@@ -24,7 +21,6 @@ function withCopiedCookies(source: NextResponse, destination: NextResponse) {
   source.cookies.getAll().forEach((cookie) => {
     destination.cookies.set(cookie.name, cookie.value, cookie);
   });
-
   return destination;
 }
 
@@ -35,9 +31,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  let response = NextResponse.next({
-    request,
-  });
+  let response = NextResponse.next({ request });
 
   const supabase = createServerClient(env.url, env.anonKey, {
     cookies: {
@@ -46,11 +40,7 @@ export async function middleware(request: NextRequest) {
       },
       setAll(cookiesToSet: Parameters<SetAllCookies>[0]) {
         cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-
-        response = NextResponse.next({
-          request,
-        });
-
+        response = NextResponse.next({ request });
         cookiesToSet.forEach(({ name, value, options }) => {
           response.cookies.set(name, value, options);
         });
@@ -70,11 +60,9 @@ export async function middleware(request: NextRequest) {
   if (!user && (wantsProtectedRoute || wantsOnboarding)) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/login";
-
     if (pathname !== "/login") {
       redirectUrl.searchParams.set("next", pathname);
     }
-
     return withCopiedCookies(response, NextResponse.redirect(redirectUrl));
   }
 
@@ -92,7 +80,7 @@ export async function middleware(request: NextRequest) {
     return withCopiedCookies(response, NextResponse.redirect(redirectUrl));
   }
 
-  if (user && wantsProtectedRoute && !hasCompletedOnboarding) {
+  if (user && wantsProtectedRoute && !wantsOnboarding && !hasCompletedOnboarding) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/onboarding";
     redirectUrl.search = "";
