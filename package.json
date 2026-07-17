@@ -18,6 +18,7 @@
     "date-fns": "latest",
     "lucide-react": "latest",
     "next": "^15",
+    "openai": "^6.48.0",
     "pdf-parse": "latest",
     "react": "^19",
     "react-dom": "^19",

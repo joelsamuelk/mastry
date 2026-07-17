@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   Fingerprint,
   Search,
@@ -17,7 +18,7 @@ const features = [
     icon: Fingerprint,
     title: "Career Passport",
     description:
-      "A structured, AI-powered representation of your entire career. Not just a CV — a living document that grows with you.",
+      "A structured, AI-powered representation of your entire career. Not just a CV. A living document that grows with you.",
   },
   {
     icon: Search,
@@ -35,7 +36,7 @@ const features = [
     icon: FileText,
     title: "Application Workspace",
     description:
-      "Cover letters, CV optimisation, application answers, and recruiter outreach — all generated from your evidence, not hallucinations.",
+      "Cover letters, CV optimisation, application answers, and recruiter outreach. All generated from your evidence, not hallucinations.",
   },
   {
     icon: Shield,
@@ -47,27 +48,37 @@ const features = [
     icon: Sparkles,
     title: "Interview Coach",
     description:
-      "Prepares likely questions, STAR examples from your career, company research, and questions to ask — tailored to every role.",
+      "Prepares likely questions, STAR examples from your career, company research, and questions to ask. Tailored to every role.",
   },
 ];
 
 const principles = [
-  "Quality over quantity — fewer, better applications",
-  "Evidence over hallucination — never invents achievements",
-  "You stay in control — Mastry prepares, you decide",
-  "Honest recommendations — tells you when not to apply",
+  "Quality over quantity. Fewer, better applications",
+  "Evidence over hallucination. Never invents achievements",
+  "You stay in control. Mastry prepares, you decide",
+  "Honest recommendations. Tells you when not to apply",
 ];
 
 export function LandingPage() {
   return (
     <>
       {/* Hero */}
-      <section className="mx-auto max-w-5xl px-6 pt-32 pb-20 text-center">
-        <p className="eyebrow mb-6">AI Career Mastery Platform</p>
+      <section className="mx-auto max-w-5xl px-6 pt-36 pb-24 text-center">
+        <Image
+          src="/brand/1.png"
+          alt=""
+          width={72}
+          height={72}
+          className="mx-auto mb-8 object-contain"
+          priority
+        />
+        <p className="mb-6 text-xs font-medium tracking-[0.3em] uppercase text-[var(--muted)]">
+          AI Career Mastery Platform
+        </p>
         <h1 className="font-display text-5xl font-extrabold tracking-tight text-[var(--ink)] sm:text-6xl lg:text-7xl text-balance">
           Master Your Career.
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-[var(--ink-muted)] text-balance">
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[var(--ink-muted)] text-balance">
           Mastry continuously searches thousands of companies, finds the
           opportunities that genuinely match your career, and prepares
           world-class applications before anyone else.
@@ -88,14 +99,14 @@ export function LandingPage() {
         <SectionHeading
           eyebrow="How it works"
           title="Upload once. Never start from scratch again."
-          description="Mastry continuously works for you — discovering, ranking, and preparing everything you need."
+          description="Mastry continuously works for you. Discovering, ranking, and preparing everything you need."
           align="center"
         />
 
         <div className="mx-auto mt-4 grid max-w-3xl gap-6 sm:grid-cols-3">
           {[
             { step: "1", title: "Upload your CV", desc: "We extract and structure your entire career into a Career Passport." },
-            { step: "2", title: "Set your goals", desc: "Tell us what you want — role level, location, remote, industries, salary." },
+            { step: "2", title: "Set your goals", desc: "Tell us what you want. Role level, location, remote, industries, salary." },
             { step: "3", title: "Mastry works for you", desc: "Every morning, curated opportunities with everything you need to apply." },
           ].map((item) => (
             <div key={item.step} className="text-center">

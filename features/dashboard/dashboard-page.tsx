@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Upload, Target, Fingerprint, ArrowRight } from "lucide-react";
+import { Upload, Target, Fingerprint, ArrowRight, Search, FileText, Shield, MessageSquare } from "lucide-react";
 import { Card, CardTitle } from "@/components/ui/card";
 import { ProgressRing } from "@/components/ui/progress-ring";
 import { Badge } from "@/components/ui/badge";
@@ -145,7 +145,7 @@ export function DashboardPage() {
             <CardTitle>Upload CV</CardTitle>
             <p className="mt-1 text-xs text-[var(--ink-muted)]">
               {data?.passport?.raw_cv_url
-                ? "CV uploaded — you can re-upload anytime"
+                ? "CV uploaded. You can re-upload anytime"
                 : "Upload your CV to auto-build your passport"}
             </p>
           </div>
@@ -167,7 +167,7 @@ export function DashboardPage() {
             <CardTitle>Career Goals</CardTitle>
             <p className="mt-1 text-xs text-[var(--ink-muted)]">
               {hasGoals
-                ? "Goals set — update anytime"
+                ? "Goals set. Update anytime"
                 : "Set your goals so Mastry can find the right roles"}
             </p>
           </div>
@@ -179,6 +179,26 @@ export function DashboardPage() {
             {hasGoals ? "Edit goals" : "Set goals"}
           </Link>
         </Card>
+      </div>
+
+      {/* Feature shortcuts */}
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          { label: "Opportunity Scout", href: "/opportunities", icon: Search, desc: "Find & score roles" },
+          { label: "Applications", href: "/applications", icon: FileText, desc: "Cover letters & outreach" },
+          { label: "Visa Intelligence", href: "/visa", icon: Shield, desc: "Work permit analysis" },
+          { label: "Interview Coach", href: "/interview", icon: MessageSquare, desc: "Prep for interviews" },
+        ].map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="group rounded-[2rem] bg-white p-5 shadow-[0_12px_40px_rgba(45,51,56,0.04)] transition duration-200 ease-out hover:-translate-y-0.5"
+          >
+            <item.icon className="mb-3 h-5 w-5 text-[var(--accent)]" />
+            <div className="text-sm font-semibold text-[var(--ink)]">{item.label}</div>
+            <div className="mt-0.5 text-xs text-[var(--ink-muted)]">{item.desc}</div>
+          </Link>
+        ))}
       </div>
 
       {/* Quick summary */}

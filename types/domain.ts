@@ -113,3 +113,83 @@ export interface FullPassport extends CareerPassport {
   certifications: Certification[];
   evidence: CareerEvidence[];
 }
+
+// Opportunities
+export type OpportunityStatus = "saved" | "applied" | "interviewing" | "offered" | "rejected" | "archived";
+
+export interface Opportunity {
+  id: string;
+  user_id: string;
+  title: string;
+  company: string;
+  location: string | null;
+  salary_min: number | null;
+  salary_max: number | null;
+  salary_currency: string | null;
+  remote_type: "remote" | "hybrid" | "onsite" | null;
+  description: string | null;
+  url: string | null;
+  source: string;
+  match_score: number | null;
+  match_breakdown: MatchBreakdown | null;
+  status: OpportunityStatus;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MatchBreakdown {
+  leadership_fit: number;
+  domain_fit: number;
+  technical_fit: number;
+  seniority_fit: number;
+  compensation_fit: number;
+  visa_fit: number;
+  growth_potential: number;
+  summary: string;
+}
+
+// Application Materials
+export type MaterialType = "cover_letter" | "cv_optimised" | "application_answer" | "outreach_message";
+
+export interface ApplicationMaterial {
+  id: string;
+  user_id: string;
+  opportunity_id: string | null;
+  type: MaterialType;
+  title: string;
+  content: string;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Interview Prep
+export interface InterviewQuestion {
+  question: string;
+  category: string;
+  difficulty: "easy" | "medium" | "hard";
+  suggested_approach: string;
+}
+
+export interface StarExample {
+  question_theme: string;
+  situation: string;
+  task: string;
+  action: string;
+  result: string;
+}
+
+export interface InterviewPrep {
+  id: string;
+  user_id: string;
+  opportunity_id: string | null;
+  company: string;
+  role_title: string;
+  likely_questions: InterviewQuestion[];
+  star_examples: StarExample[];
+  company_research: { key_points: string[]; culture_notes: string; recent_news: string[] } | null;
+  questions_to_ask: string[];
+  created_at: string;
+  updated_at: string;
+}

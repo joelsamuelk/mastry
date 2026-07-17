@@ -32,7 +32,7 @@ export function AppShell({ children, userName }: AppShellProps) {
         {/* Top bar */}
         <header className="flex items-center justify-between px-6 py-4 lg:justify-end">
           <Link href="/dashboard" className="lg:hidden">
-            <Brand size="sm" />
+            <Brand variant="mark" size="sm" />
           </Link>
           <div className="flex items-center gap-4">
             {userName && (

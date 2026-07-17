@@ -7,7 +7,7 @@ export function MarketingHeader() {
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4">
       <div className="glass-panel flex items-center justify-between gap-8 px-6 py-3 w-full max-w-5xl mx-auto">
         <Link href="/">
-          <Brand />
+          <Brand variant="mark" size="sm" />
         </Link>
         <div className="flex items-center gap-3">
           <Link

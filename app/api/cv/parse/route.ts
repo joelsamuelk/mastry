@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { parseCV } from "@/lib/anthropic/cv-parser";
+import { parseCV } from "@/lib/ai/cv-parser";
 
 export async function POST(request: Request) {
   const supabase = await createSupabaseServerClient();

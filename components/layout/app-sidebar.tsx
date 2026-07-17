@@ -12,7 +12,7 @@ export function AppSidebar() {
   return (
     <aside className="hidden w-64 flex-shrink-0 flex-col gap-6 p-6 lg:flex">
       <Link href="/dashboard">
-        <Brand />
+        <Brand variant="mark" size="md" />
       </Link>
 
       <nav className="flex flex-col gap-1">
@@ -27,7 +27,7 @@ export function AppSidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition duration-200 ease-out",
                 isActive
-                  ? "bg-white text-[var(--accent)] shadow-[0_12px_40px_rgba(45,51,56,0.04)]"
+                  ? "bg-white text-[var(--ink)] shadow-[0_12px_40px_rgba(45,51,56,0.04)]"
                   : "text-[var(--ink-muted)] hover:bg-[var(--surface-low)] hover:text-[var(--ink)]",
               )}
             >

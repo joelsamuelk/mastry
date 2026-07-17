@@ -217,7 +217,7 @@ export function PassportView() {
                     </p>
                   </div>
                   <span className="text-xs text-[var(--muted)] whitespace-nowrap">
-                    {emp.start_date || "?"} — {emp.is_current ? "Present" : emp.end_date || "?"}
+                    {emp.start_date || "?"} - {emp.is_current ? "Present" : emp.end_date || "?"}
                   </span>
                 </div>
                 {emp.description && (
@@ -267,7 +267,7 @@ export function PassportView() {
                 </p>
                 {(edu.start_year || edu.end_year) && (
                   <span className="text-xs text-[var(--muted)]">
-                    {edu.start_year || "?"} — {edu.end_year || "?"}
+                    {edu.start_year || "?"} - {edu.end_year || "?"}
                   </span>
                 )}
               </div>
