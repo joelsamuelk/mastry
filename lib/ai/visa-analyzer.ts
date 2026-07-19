@@ -1,4 +1,4 @@
-import { getOpenAIClient } from "./client";
+import { aiComplete } from "./client";
 
 interface VisaInput {
   nationality: string | null;
@@ -59,24 +59,12 @@ Return ONLY valid JSON matching this structure:
 }`;
 
 export async function analyzeVisa(input: VisaInput): Promise<VisaAnalysis> {
-  const openai = getOpenAIClient();
-  if (!openai) throw new Error("OpenAI API not configured");
-
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      {
-        role: "user",
-        content: `Analyze visa and work permit options for this candidate.\n\nPROFILE:\n${JSON.stringify(input, null, 2)}`,
-      },
-    ],
-    response_format: { type: "json_object" },
+  const text = await aiComplete({
+    system: SYSTEM_PROMPT,
+    prompt: `Analyze visa and work permit options for this candidate.\n\nPROFILE:\n${JSON.stringify(input, null, 2)}`,
+    json: true,
     temperature: 0.2,
   });
-
-  const text = response.choices[0]?.message?.content;
-  if (!text) throw new Error("No response from AI");
 
   try {
     return JSON.parse(text) as VisaAnalysis;

@@ -1,4 +1,4 @@
-import { getOpenAIClient } from "./client";
+import { aiComplete, aiChat } from "./client";
 import type { MockInterviewMessage, MockInterviewFeedback, MockInterviewType } from "@/types/domain";
 
 interface MockInterviewStartInput {
@@ -46,58 +46,38 @@ Return ONLY valid JSON:
 }
 
 export async function startMockInterview(input: MockInterviewStartInput): Promise<string> {
-  const openai = getOpenAIClient();
-  if (!openai) throw new Error("OpenAI API not configured");
-
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: getInterviewerSystemPrompt(input) },
-      {
-        role: "user",
-        content: `Start the interview. The candidate's profile:\n${JSON.stringify(input.passport, null, 2)}\n\nBegin with a brief introduction of yourself (make up a realistic name and title at ${input.company}) and ask the first question.`,
-      },
-    ],
-    response_format: { type: "json_object" },
+  const text = await aiComplete({
+    system: getInterviewerSystemPrompt(input),
+    prompt: `Start the interview. The candidate's profile:\n${JSON.stringify(input.passport, null, 2)}\n\nBegin with a brief introduction of yourself (make up a realistic name and title at ${input.company}) and ask the first question.`,
+    json: true,
     temperature: 0.6,
   });
-
-  const text = response.choices[0]?.message?.content;
-  if (!text) throw new Error("No response from AI");
 
   const parsed = JSON.parse(text);
   return parsed.message;
 }
 
 export async function respondToCandidate(input: MockInterviewRespondInput): Promise<{ message: string; is_complete: boolean }> {
-  const openai = getOpenAIClient();
-  if (!openai) throw new Error("OpenAI API not configured");
-
-  const chatMessages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
-    { role: "system", content: getInterviewerSystemPrompt(input) },
-  ];
+  const chatMessages: Array<{ role: "user" | "assistant"; content: string }> = [];
 
   for (const msg of input.messages) {
     chatMessages.push({
-      role: msg.role === "interviewer" ? "assistant" as const : "user" as const,
+      role: msg.role === "interviewer" ? "assistant" : "user",
       content: msg.content,
     });
   }
 
   chatMessages.push({
-    role: "user" as const,
+    role: "user",
     content: input.candidate_response,
   });
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+  const text = await aiChat({
+    system: getInterviewerSystemPrompt(input),
     messages: chatMessages,
-    response_format: { type: "json_object" },
+    json: true,
     temperature: 0.6,
   });
-
-  const text = response.choices[0]?.message?.content;
-  if (!text) throw new Error("No response from AI");
 
   const parsed = JSON.parse(text);
   return { message: parsed.message, is_complete: parsed.is_complete ?? false };
@@ -109,20 +89,13 @@ export async function generateFeedback(input: {
   interview_type: MockInterviewType;
   messages: MockInterviewMessage[];
 }): Promise<MockInterviewFeedback> {
-  const openai = getOpenAIClient();
-  if (!openai) throw new Error("OpenAI API not configured");
-
   const conversation = input.messages
     .filter((m) => m.role !== "system")
     .map((m) => `${m.role === "interviewer" ? "INTERVIEWER" : "CANDIDATE"}: ${m.content}`)
     .join("\n\n");
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      {
-        role: "system",
-        content: `You are an expert interview coach reviewing a mock ${input.interview_type} interview at ${input.company} for ${input.role_title}. Provide detailed, actionable feedback.
+  const text = await aiComplete({
+    system: `You are an expert interview coach reviewing a mock ${input.interview_type} interview at ${input.company} for ${input.role_title}. Provide detailed, actionable feedback.
 
 Return ONLY valid JSON:
 {
@@ -138,18 +111,10 @@ Return ONLY valid JSON:
   ],
   "tips": ["Practical tips for future interviews"]
 }`,
-      },
-      {
-        role: "user",
-        content: `Review this mock interview and provide feedback:\n\n${conversation}`,
-      },
-    ],
-    response_format: { type: "json_object" },
+    prompt: `Review this mock interview and provide feedback:\n\n${conversation}`,
+    json: true,
     temperature: 0.4,
   });
-
-  const text = response.choices[0]?.message?.content;
-  if (!text) throw new Error("No response from AI");
 
   return JSON.parse(text) as MockInterviewFeedback;
 }

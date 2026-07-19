@@ -1,4 +1,4 @@
-import { getOpenAIClient } from "./client";
+import { aiComplete } from "./client";
 
 export type CoverLetterTone = "professional" | "conversational" | "assertive" | "creative";
 export type CoverLetterVersion = "standard" | "concise" | "detailed" | "storytelling";
@@ -70,9 +70,6 @@ CRITICAL RULES:
 Return the content as plain text (no markdown formatting).`;
 
 export async function generateEnhancedCoverLetter(input: EnhancedCoverLetterInput): Promise<string> {
-  const openai = getOpenAIClient();
-  if (!openai) throw new Error("OpenAI API not configured");
-
   const typeLabels: Record<string, string> = {
     cover_letter: "cover letter",
     outreach_message: "recruiter outreach message",
@@ -84,20 +81,9 @@ export async function generateEnhancedCoverLetter(input: EnhancedCoverLetterInpu
     ? `\n\nADDITIONAL INSTRUCTIONS FROM USER: ${input.custom_instructions}`
     : "";
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      {
-        role: "user",
-        content: `Generate a ${typeLabels[input.type]} for this candidate.\n\nTONE: ${getToneGuidance(input.tone)}\nFORMAT: ${getVersionGuidance(input.version, input.type)}\n\nCANDIDATE:\n${JSON.stringify(input.passport, null, 2)}\n\nRECENT EXPERIENCE:\n${JSON.stringify(input.employers.slice(0, 3), null, 2)}\n\nTARGET ROLE:\n${JSON.stringify(input.opportunity, null, 2)}${customInstructions}`,
-      },
-    ],
+  return aiComplete({
+    system: SYSTEM_PROMPT,
+    prompt: `Generate a ${typeLabels[input.type]} for this candidate.\n\nTONE: ${getToneGuidance(input.tone)}\nFORMAT: ${getVersionGuidance(input.version, input.type)}\n\nCANDIDATE:\n${JSON.stringify(input.passport, null, 2)}\n\nRECENT EXPERIENCE:\n${JSON.stringify(input.employers.slice(0, 3), null, 2)}\n\nTARGET ROLE:\n${JSON.stringify(input.opportunity, null, 2)}${customInstructions}`,
     temperature: 0.7,
   });
-
-  const text = response.choices[0]?.message?.content;
-  if (!text) throw new Error("No response from AI");
-
-  return text;
 }

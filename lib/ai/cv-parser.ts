@@ -1,4 +1,4 @@
-import { getOpenAIClient } from "./client";
+import { aiComplete } from "./client";
 
 export interface ParsedCV {
   career_summary: string;
@@ -83,28 +83,12 @@ Return ONLY valid JSON matching this exact structure:
 }`;
 
 export async function parseCV(cvText: string): Promise<ParsedCV> {
-  const openai = getOpenAIClient();
-  if (!openai) {
-    throw new Error("OpenAI API not configured");
-  }
-
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      {
-        role: "user",
-        content: `Parse the following CV and extract structured career data. Return ONLY valid JSON, no markdown formatting.\n\n---\n\n${cvText}`,
-      },
-    ],
-    response_format: { type: "json_object" },
+  const text = await aiComplete({
+    system: SYSTEM_PROMPT,
+    prompt: `Parse the following CV and extract structured career data. Return ONLY valid JSON, no markdown formatting.\n\n---\n\n${cvText}`,
+    json: true,
     temperature: 0.1,
   });
-
-  const text = response.choices[0]?.message?.content;
-  if (!text) {
-    throw new Error("No response from AI");
-  }
 
   let parsed: ParsedCV;
   try {

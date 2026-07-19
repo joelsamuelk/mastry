@@ -1,4 +1,4 @@
-import { getOpenAIClient } from "./client";
+import { aiComplete } from "./client";
 import type { MatchBreakdown } from "@/types/domain";
 
 interface MatchInput {
@@ -55,24 +55,12 @@ Return ONLY valid JSON:
 }`;
 
 export async function scoreMatch(input: MatchInput): Promise<{ score: number; breakdown: MatchBreakdown }> {
-  const openai = getOpenAIClient();
-  if (!openai) throw new Error("OpenAI API not configured");
-
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      {
-        role: "user",
-        content: `CANDIDATE PROFILE:\n${JSON.stringify(input.passport, null, 2)}\n\nCAREER GOALS:\n${JSON.stringify(input.goals, null, 2)}\n\nJOB OPPORTUNITY:\n${JSON.stringify(input.opportunity, null, 2)}`,
-      },
-    ],
-    response_format: { type: "json_object" },
+  const text = await aiComplete({
+    system: SYSTEM_PROMPT,
+    prompt: `CANDIDATE PROFILE:\n${JSON.stringify(input.passport, null, 2)}\n\nCAREER GOALS:\n${JSON.stringify(input.goals, null, 2)}\n\nJOB OPPORTUNITY:\n${JSON.stringify(input.opportunity, null, 2)}`,
+    json: true,
     temperature: 0.2,
   });
-
-  const text = response.choices[0]?.message?.content;
-  if (!text) throw new Error("No response from AI");
 
   let breakdown: MatchBreakdown;
   try {

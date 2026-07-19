@@ -1,4 +1,4 @@
-import { getOpenAIClient } from "./client";
+import { aiComplete } from "./client";
 import type { InterviewQuestion, StarExample } from "@/types/domain";
 
 interface InterviewPrepInput {
@@ -74,24 +74,12 @@ Return ONLY valid JSON:
 Generate 8-10 questions, 3-5 STAR examples, and 4-6 questions to ask.`;
 
 export async function prepareInterview(input: InterviewPrepInput): Promise<InterviewPrepResult> {
-  const openai = getOpenAIClient();
-  if (!openai) throw new Error("OpenAI API not configured");
-
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      {
-        role: "user",
-        content: `Prepare an interview prep pack for this candidate.\n\nCANDIDATE:\n${JSON.stringify(input.passport, null, 2)}\n\nEXPERIENCE:\n${JSON.stringify(input.employers.slice(0, 4), null, 2)}\n\nTARGET ROLE:\n${JSON.stringify(input.opportunity, null, 2)}`,
-      },
-    ],
-    response_format: { type: "json_object" },
+  const text = await aiComplete({
+    system: SYSTEM_PROMPT,
+    prompt: `Prepare an interview prep pack for this candidate.\n\nCANDIDATE:\n${JSON.stringify(input.passport, null, 2)}\n\nEXPERIENCE:\n${JSON.stringify(input.employers.slice(0, 4), null, 2)}\n\nTARGET ROLE:\n${JSON.stringify(input.opportunity, null, 2)}`,
+    json: true,
     temperature: 0.5,
   });
-
-  const text = response.choices[0]?.message?.content;
-  if (!text) throw new Error("No response from AI");
 
   try {
     return JSON.parse(text) as InterviewPrepResult;

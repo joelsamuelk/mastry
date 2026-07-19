@@ -1,4 +1,4 @@
-import { getOpenAIClient } from "./client";
+import { aiComplete } from "./client";
 import type { JobSearchResult } from "@/types/domain";
 
 interface JobDiscoveryInput {
@@ -67,28 +67,16 @@ Return ONLY valid JSON:
 }`;
 
 export async function discoverJobs(input: JobDiscoveryInput): Promise<JobSearchResult[]> {
-  const openai = getOpenAIClient();
-  if (!openai) throw new Error("OpenAI API not configured");
-
   const filterContext = input.filters
     ? `\n\nADDITIONAL FILTERS:\n${JSON.stringify(input.filters, null, 2)}`
     : "";
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      {
-        role: "user",
-        content: `Find jobs matching this search.\n\nSEARCH QUERY: "${input.query}"\n\nCANDIDATE PROFILE:\n${JSON.stringify(input.passport, null, 2)}\n\nCAREER GOALS:\n${JSON.stringify(input.goals, null, 2)}${filterContext}`,
-      },
-    ],
-    response_format: { type: "json_object" },
+  const text = await aiComplete({
+    system: SYSTEM_PROMPT,
+    prompt: `Find jobs matching this search.\n\nSEARCH QUERY: "${input.query}"\n\nCANDIDATE PROFILE:\n${JSON.stringify(input.passport, null, 2)}\n\nCAREER GOALS:\n${JSON.stringify(input.goals, null, 2)}${filterContext}`,
+    json: true,
     temperature: 0.7,
   });
-
-  const text = response.choices[0]?.message?.content;
-  if (!text) throw new Error("No response from AI");
 
   try {
     const parsed = JSON.parse(text);
