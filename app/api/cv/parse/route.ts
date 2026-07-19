@@ -105,6 +105,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, data: parsed });
   } catch (error) {
+    console.error("[CV Parse] Error:", error);
+
     await supabase
       .from("career_passports")
       .update({ ai_extraction_status: "failed" })

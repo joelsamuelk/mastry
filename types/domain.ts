@@ -134,6 +134,12 @@ export interface Opportunity {
   match_breakdown: MatchBreakdown | null;
   status: OpportunityStatus;
   notes: string | null;
+  applied_at: string | null;
+  follow_up_at: string | null;
+  deadline: string | null;
+  contact_name: string | null;
+  contact_email: string | null;
+  application_method: "website" | "email" | "linkedin" | "referral" | "recruiter" | "other" | null;
   created_at: string;
   updated_at: string;
 }
@@ -190,6 +196,95 @@ export interface InterviewPrep {
   star_examples: StarExample[];
   company_research: { key_points: string[]; culture_notes: string; recent_news: string[] } | null;
   questions_to_ask: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+// Job Discovery
+export type SearchStatus = "pending" | "searching" | "completed" | "failed";
+
+export interface JobSearchResult {
+  title: string;
+  company: string;
+  location: string | null;
+  salary_min: number | null;
+  salary_max: number | null;
+  salary_currency: string | null;
+  remote_type: "remote" | "hybrid" | "onsite" | null;
+  description: string;
+  url: string;
+  source: string;
+  posted_date: string | null;
+}
+
+export interface JobSearch {
+  id: string;
+  user_id: string;
+  query: string;
+  filters: Record<string, unknown>;
+  results: JobSearchResult[];
+  result_count: number;
+  status: SearchStatus;
+  created_at: string;
+}
+
+// Interview Scheduling
+export type InterviewScheduleStatus = "scheduled" | "completed" | "cancelled" | "rescheduled";
+export type InterviewType = "phone" | "video" | "onsite" | "take_home";
+
+export interface InterviewSchedule {
+  id: string;
+  user_id: string;
+  opportunity_id: string | null;
+  company: string;
+  role_title: string;
+  round: string;
+  interview_type: InterviewType;
+  scheduled_at: string;
+  duration_minutes: number;
+  location: string | null;
+  meeting_link: string | null;
+  interviewer_names: string[];
+  notes: string | null;
+  calendar_event_id: string | null;
+  status: InterviewScheduleStatus;
+  reminder_sent: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Mock Interviews
+export type MockInterviewType = "behavioral" | "technical" | "case_study" | "mixed";
+
+export interface MockInterviewMessage {
+  role: "interviewer" | "candidate" | "system";
+  content: string;
+  timestamp: string;
+}
+
+export interface MockInterviewFeedback {
+  overall_score: number;
+  strengths: string[];
+  improvements: string[];
+  question_scores: Array<{
+    question: string;
+    score: number;
+    feedback: string;
+  }>;
+  tips: string[];
+}
+
+export interface MockInterview {
+  id: string;
+  user_id: string;
+  opportunity_id: string | null;
+  company: string;
+  role_title: string;
+  interview_type: MockInterviewType;
+  difficulty: "easy" | "medium" | "hard";
+  messages: MockInterviewMessage[];
+  feedback: MockInterviewFeedback | null;
+  status: "in_progress" | "completed";
   created_at: string;
   updated_at: string;
 }

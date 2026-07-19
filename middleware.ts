@@ -13,6 +13,9 @@ const protectedPrefixes = [
   "/applications",
   "/visa",
   "/interview",
+  "/discover",
+  "/scheduler",
+  "/mock-interview",
 ];
 
 function isProtectedPath(pathname: string) {

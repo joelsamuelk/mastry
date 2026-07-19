@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Upload, Target, Fingerprint, ArrowRight, Search, FileText, Shield, MessageSquare } from "lucide-react";
+import { Upload, Target, Fingerprint, ArrowRight, Search, FileText, Shield, MessageSquare, Globe, Calendar, Mic } from "lucide-react";
 import { Card, CardTitle } from "@/components/ui/card";
 import { ProgressRing } from "@/components/ui/progress-ring";
 import { Badge } from "@/components/ui/badge";
@@ -191,10 +191,13 @@ export function DashboardPage() {
       {/* Feature shortcuts */}
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          { label: "Opportunity Scout", href: "/opportunities", icon: Search, desc: "Find & score roles" },
+          { label: "Job Discovery", href: "/discover", icon: Globe, desc: "AI-powered job search" },
+          { label: "Opportunity Scout", href: "/opportunities", icon: Search, desc: "Track & score roles" },
           { label: "Applications", href: "/applications", icon: FileText, desc: "Cover letters & outreach" },
-          { label: "Visa Intelligence", href: "/visa", icon: Shield, desc: "Work permit analysis" },
+          { label: "Scheduler", href: "/scheduler", icon: Calendar, desc: "Manage interviews" },
           { label: "Interview Coach", href: "/interview", icon: MessageSquare, desc: "Prep for interviews" },
+          { label: "Mock Interview", href: "/mock-interview", icon: Mic, desc: "Practice with AI" },
+          { label: "Visa Intelligence", href: "/visa", icon: Shield, desc: "Work permit analysis" },
         ].map((item) => (
           <Link
             key={item.href}
