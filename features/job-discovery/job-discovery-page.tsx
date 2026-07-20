@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button, buttonStyles } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SectionHeading } from "@/components/ui/section-heading";
-import type { JobSearchResult, JobSearch } from "@/types/domain";
+import type { JobSearchResult } from "@/types/domain";
 import { toast } from "sonner";
 
 export function JobDiscoveryPage() {

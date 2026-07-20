@@ -10,29 +10,47 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden w-64 flex-shrink-0 flex-col gap-6 p-6 lg:flex">
-      <Link href="/dashboard">
-        <Brand variant="mark" size="md" />
+    <aside className="sticky top-0 hidden h-screen w-[236px] flex-shrink-0 flex-col bg-[var(--dark-surface)] p-[22px_14px] lg:flex">
+      <Link href="/dashboard" className="flex items-center gap-[10px] px-[10px] pb-[22px]">
+        <Brand variant="mark" size="sm" theme="light" />
+        <span className="text-[17px] font-semibold text-white">Mastry</span>
       </Link>
 
-      <nav className="flex flex-col gap-1">
-        {appNavigation.map((item) => {
+      <nav className="flex flex-col gap-0.5">
+        {appNavigation.map((item, i) => {
           const isActive =
             pathname === item.href || pathname.startsWith(`${item.href}/`);
+          const num = String(i + 1).padStart(2, "0");
 
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition duration-200 ease-out",
+                "flex items-center gap-[11px] rounded-[10px] px-[11px] py-[9px] text-left transition-colors duration-150",
                 isActive
-                  ? "bg-white text-[var(--ink)] shadow-[0_12px_40px_rgba(45,51,56,0.04)]"
-                  : "text-[var(--ink-muted)] hover:bg-[var(--surface-low)] hover:text-[var(--ink)]",
+                  ? "bg-white/[0.08]"
+                  : "hover:bg-white/[0.04]",
               )}
             >
-              <item.icon className="h-[18px] w-[18px]" />
-              {item.label}
+              <span
+                className={cn(
+                  "font-mono w-4 text-[11px]",
+                  isActive ? "text-[var(--blue-light)]" : "text-white/[0.25]",
+                )}
+              >
+                {num}
+              </span>
+              <span
+                className={cn(
+                  "text-[13.5px]",
+                  isActive
+                    ? "font-semibold text-white"
+                    : "font-medium text-white/[0.50]",
+                )}
+              >
+                {item.label}
+              </span>
             </Link>
           );
         })}

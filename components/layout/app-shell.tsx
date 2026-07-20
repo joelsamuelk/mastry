@@ -18,6 +18,11 @@ export function AppShell({ children, userName }: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
 
+  const currentNav = appNavigation.find(
+    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
+  );
+  const routeTitle = currentNav?.label ?? "Dashboard";
+
   async function handleSignOut() {
     await fetch("/auth/signout", { method: "POST" });
     router.push("/");
@@ -25,38 +30,46 @@ export function AppShell({ children, userName }: AppShellProps) {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[var(--surface)]">
       <AppSidebar />
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col">
         {/* Top bar */}
-        <header className="flex items-center justify-between px-6 py-4 lg:justify-end">
+        <header className="sticky top-0 z-20 flex h-[62px] items-center justify-between bg-[var(--surface)]/80 px-[34px] backdrop-blur-[12px]">
           <Link href="/dashboard" className="lg:hidden">
             <Brand variant="mark" size="sm" />
           </Link>
-          <div className="flex items-center gap-4">
+          <span className="hidden text-[15px] font-semibold tracking-[-0.01em] lg:block">
+            {routeTitle}
+          </span>
+          <div className="flex items-center gap-[14px]">
+            <span className="font-mono hidden text-[12px] text-[var(--muted)] sm:block">
+              &#8984;K
+            </span>
             {userName && (
-              <span className="hidden text-sm font-medium text-[var(--ink-muted)] sm:block">
+              <span className="hidden text-[13px] font-medium text-[var(--muted)] sm:block">
                 {userName}
               </span>
             )}
             <button
               onClick={handleSignOut}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-[var(--muted)] transition hover:bg-[var(--surface-low)] hover:text-[var(--ink)]"
+              className="text-[13px] text-[var(--muted)] transition hover:text-[var(--ink)]"
               title="Sign out"
             >
-              <LogOut className="h-[18px] w-[18px]" />
+              <LogOut className="h-4 w-4" />
             </button>
           </div>
         </header>
 
         {/* Main content */}
-        <main className="flex-1 px-6 pb-24 lg:pb-10">{children}</main>
+        <main className="flex-1 px-[34px] pb-24 lg:pb-10">
+          <div className="mx-auto w-full max-w-[1180px]">{children}</div>
+        </main>
       </div>
 
       {/* Mobile bottom nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around bg-white/80 px-2 py-2 backdrop-blur-xl lg:hidden">
-        {appNavigation.map((item) => {
+        {appNavigation.slice(0, 5).map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(`${item.href}/`);
 
@@ -66,9 +79,7 @@ export function AppShell({ children, userName }: AppShellProps) {
               href={item.href}
               className={cn(
                 "flex flex-col items-center gap-1 rounded-2xl px-3 py-2 text-[10px] font-semibold transition",
-                isActive
-                  ? "text-[var(--ink)]"
-                  : "text-[var(--muted)]",
+                isActive ? "text-[var(--accent)]" : "text-[var(--muted)]",
               )}
             >
               <item.icon className="h-5 w-5" />

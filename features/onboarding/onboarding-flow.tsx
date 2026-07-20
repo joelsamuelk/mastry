@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Upload, Target, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { FileUpload } from "@/components/ui/file-upload";
 import { Brand } from "@/components/brand/brand";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
@@ -29,9 +29,6 @@ export function OnboardingFlow() {
   });
   const router = useRouter();
 
-  const handleCVPaste = useCallback(() => {
-    // Show text input for CV
-  }, []);
 
   async function handleParseCV() {
     if (cvText.trim().length < 50) {

@@ -8,19 +8,21 @@ interface BrandProps {
   theme?: "dark" | "light";
 }
 
-const markSizes = { sm: 28, md: 36, lg: 52 };
-const wordmarkSizes = { sm: 80, md: 110, lg: 160 };
+const markSizes = { sm: 24, md: 32, lg: 44 };
+const wordmarkSizes = { sm: 80, md: 100, lg: 140 };
+const wordmarkHeights = { sm: 28, md: 36, lg: 48 };
 
 export function Brand({ className, size = "md", variant = "mark", theme = "dark" }: BrandProps) {
+  const isLight = theme === "light";
+
   if (variant === "wordmark") {
-    const w = wordmarkSizes[size];
-    const src = theme === "dark" ? "/brand/2.png" : "/brand/3.png";
+    const src = isLight ? "/brand/4.png" : "/brand/2.png";
     return (
       <Image
         src={src}
         alt="Mastry"
-        width={w}
-        height={Math.round(w * 1.1)}
+        width={wordmarkSizes[size]}
+        height={wordmarkHeights[size]}
         className={cn("object-contain", className)}
         priority
       />
@@ -28,7 +30,7 @@ export function Brand({ className, size = "md", variant = "mark", theme = "dark"
   }
 
   const px = markSizes[size];
-  const src = theme === "dark" ? "/brand/1.png" : "/brand/4.png";
+  const src = isLight ? "/brand/3.png" : "/brand/1.png";
   return (
     <Image
       src={src}

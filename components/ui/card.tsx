@@ -3,16 +3,17 @@ import { cn } from "@/lib/utils";
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  variant?: "default" | "inset";
+  variant?: "default" | "inset" | "dark";
 }
 
 export function Card({ className, variant = "default", children, ...props }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-[2rem] p-6 transition duration-200 ease-out",
-        variant === "default" && "bg-white shadow-[0_12px_40px_rgba(45,51,56,0.04)]",
+        "rounded-[var(--card-radius-lg)] p-6 transition duration-200 ease-out",
+        variant === "default" && "bg-white shadow-[var(--card-shadow)]",
         variant === "inset" && "bg-[var(--surface-low)]",
+        variant === "dark" && "bg-[var(--dark-surface)] text-white shadow-[var(--card-shadow-dark)]",
         className,
       )}
       {...props}
@@ -33,7 +34,7 @@ export function CardHeader({ className, children, ...props }: HTMLAttributes<HTM
 export function CardTitle({ className, children, ...props }: HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn("font-display text-lg font-bold text-[var(--ink)]", className)}
+      className={cn("text-lg font-semibold text-[var(--ink)]", className)}
       {...props}
     >
       {children}

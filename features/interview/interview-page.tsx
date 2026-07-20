@@ -7,8 +7,6 @@ import {
   Building2,
   HelpCircle,
   Sparkles,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

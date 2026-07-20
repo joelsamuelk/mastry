@@ -25,7 +25,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { InterviewSchedule, InterviewType, Opportunity } from "@/types/domain";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { toast } from "sonner";
-import { format, isPast, isToday, isTomorrow, addDays } from "date-fns";
+import { format, isPast, isToday, isTomorrow } from "date-fns";
 
 const interviewTypeIcons = {
   phone: Phone,
@@ -80,25 +80,28 @@ export function SchedulerPage() {
   });
 
   useEffect(() => {
+    let cancelled = false;
+    async function loadData() {
+      const supabase = createSupabaseBrowserClient();
+      if (!supabase) { setLoading(false); return; }
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { setLoading(false); return; }
+
+      const [schedulesRes, oppsRes] = await Promise.all([
+        fetch("/api/interviews/schedule").then((r) => r.json()),
+        supabase.from("opportunities").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+      ]);
+
+      if (!cancelled) {
+        setSchedules(schedulesRes.data ?? []);
+        setOpportunities(oppsRes.data ?? []);
+        setLoading(false);
+      }
+    }
     loadData();
+    return () => { cancelled = true; };
   }, []);
-
-  async function loadData() {
-    const supabase = createSupabaseBrowserClient();
-    if (!supabase) { setLoading(false); return; }
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setLoading(false); return; }
-
-    const [schedulesRes, oppsRes] = await Promise.all([
-      fetch("/api/interviews/schedule").then((r) => r.json()),
-      supabase.from("opportunities").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-    ]);
-
-    setSchedules(schedulesRes.data ?? []);
-    setOpportunities(oppsRes.data ?? []);
-    setLoading(false);
-  }
 
   async function handleAdd() {
     if (!form.company || !form.role_title || !form.scheduled_at) {

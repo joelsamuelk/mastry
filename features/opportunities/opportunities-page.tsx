@@ -80,19 +80,20 @@ export function OpportunitiesPage() {
   });
 
   useEffect(() => {
-    loadOpportunities();
-  }, []);
-
-  async function loadOpportunities() {
-    try {
-      const res = await fetch("/api/opportunities");
-      const json = await res.json();
-      setOpportunities(json.data ?? []);
-    } catch {
-      toast.error("Failed to load opportunities");
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch("/api/opportunities");
+        const json = await res.json();
+        if (!cancelled) setOpportunities(json.data ?? []);
+      } catch {
+        if (!cancelled) toast.error("Failed to load opportunities");
+      }
+      if (!cancelled) setLoading(false);
     }
-    setLoading(false);
-  }
+    load();
+    return () => { cancelled = true; };
+  }, []);
 
   async function handleAdd() {
     if (!form.title || !form.company) {

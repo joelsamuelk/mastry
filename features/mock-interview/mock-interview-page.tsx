@@ -11,7 +11,6 @@ import {
   Loader2,
   Star,
   TrendingUp,
-  AlertCircle,
   Lightbulb,
 } from "lucide-react";
 import { Card, CardTitle } from "@/components/ui/card";
